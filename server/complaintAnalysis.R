@@ -2,22 +2,46 @@
 
 library(data.table)
 library(jsonlite)
+
 # filePath <- "c://Users//ernayana//Desktop//Hackathon//Hacakthon - Sample Data//Use Case 3//Complaint Data.csv"
-# columnName <- "Complaint Type"
+#filename <- args[1]
+
+readData("ComplaintData.csv");
 
 readData <- function(filePath){
   dataFile <<- fread(filePath, header = T)
   columnNames <- colnames(dataFile)
-  return(toJSON(columnNames, auto_unbox = T))
+  write_json(columnNames, "columnNames.json")
+  basicInfo();
 }
 
-columnExploration <- function(columnName){
-  uniqueVal <- unique(dataFile[[columnName]])
-  uniqueValFreq <- as.data.frame(table(dataFile[[columnName]]))
-  colnames(uniqueValFreq) <- c(columnName,"Frequency")
+basicInfo <- function(){
+  ## no. of complaints rdressed
+  totalComplaints <- nrow(dataFile)
+  uniqueComplaints <- length(unique(dataFile$`Complaint Type`))
+  redressedComplaints <- length(which(dataFile$`Is Complaint Redressed?`=="YES"))
+  notRedressedComplaints <- length(which(dataFile$`Is Complaint Redressed?`=="NO"))
+  avgComplaintResolTime <- as.integer(mean(dataFile$`Time Taken for comlaint Redressal`, na.rm = T))
+  basicInfo <- list()
+  basicInfo[[1]] <- totalComplaints
+  basicInfo[[2]] <- uniqueComplaints
+  basicInfo[[3]] <- redressedComplaints
+  basicInfo[[4]] <- notRedressedComplaints
+  basicInfo[[5]] <- avgComplaintResolTime
+  basicInfo[[6]] <- wordCloud()
+  names(basicInfo) <- c("totalComplaints","uniqueComplaints","redressedComplaints","notRedressedComplaints","avgComplaintResolTime","wordCloud")
+  write_json(basicInfo,"basicInfo.json")
+  wordCloud();
+}
+
+wordCloud <- function(){
+  uniqueVal <- unique(dataFile$`Complaint Type`)
+  uniqueValFreq <- as.data.frame(table(dataFile$`Complaint Type`))
+  colnames(uniqueValFreq) <- c("problem","count")
   uniqueValFreq <- uniqueValFreq[order(uniqueValFreq[,2], decreasing = T),]
   row.names(uniqueValFreq) <- NULL
-  return(toJSON(uniqueValFreq, auto_unbox = T))
+  write_json(uniqueValFreq,"wordCloud.json")
+  return(uniqueValFreq)
 }
 
 
