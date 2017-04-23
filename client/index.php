@@ -1,5 +1,5 @@
 <?php
-        error_reporting(E_ALL);
+        //error_reporting(E_ALL);
         exec("Rscript ../server/complaintAnalysis.R");
 ?>
 <!DOCTYPE html>
@@ -66,10 +66,13 @@
                         <a href="index.php"><i class="fa fa-fw fa-dashboard"></i> Complaints Analysis </a>
                     </li>
                     <li>
-                        <a href="charts.php"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                        <a href="charts.php"><i class="fa fa-fw fa-bar-chart-o"></i> Complaints VS Demographics Analysis</a>
                     </li>
                     <li>
-                        <a href="tables.php"><i class="fa fa-fw fa-table"></i> Tables</a>
+                        <a href="tables.php"><i class="fa fa-fw fa-table"></i>Aging of Complaints</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-dashboard"></i>Missing Complaints Analysis</a>
                     </li>
                     
                 </ul>
